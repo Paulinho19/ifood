@@ -1,9 +1,7 @@
-const name = "";
-
-console.log(name);
+import Header from "./_components/header";
 
 const Home = () => {
-  return <h1>Hello</h1>;
+  return <Header />;
 };
 
 export default Home;
