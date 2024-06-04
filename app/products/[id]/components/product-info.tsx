@@ -91,41 +91,43 @@ const ProductInfo = ({ product, extraProducts }: ProductInfoProps) => {
         </div>
       </div>
 
-      <Card className="mt-5 flex justify-around p-5">
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <span>Entrega</span>
-            <BikeIcon />
+      <div className="px-5">
+        <Card className="mt-5 flex justify-around p-5">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span>Entrega</span>
+              <BikeIcon />
+            </div>
+
+            {Number(product.restaurant.deliveryFee) > 0 ? (
+              <p className="mr-4 text-sm font-semibold">
+                {formatCurrency(Number(product.restaurant.deliveryFee))}
+              </p>
+            ) : (
+              <p className="mr-4 text-sm font-semibold">Grátis</p>
+            )}
           </div>
 
-          {Number(product.restaurant.deliveryFee) > 0 ? (
-            <p className="mr-4 text-sm font-semibold">
-              {formatCurrency(Number(product.restaurant.deliveryFee))}
-            </p>
-          ) : (
-            <p className="mr-4 text-sm font-semibold">Grátis</p>
-          )}
-        </div>
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span>Tempo</span>
+              <TimerIcon />
+            </div>
 
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <span>Tempo</span>
-            <TimerIcon />
+            <span className="mr-4 text-sm font-semibold">
+              {product.restaurant.deliveryTimeMinutes}min
+            </span>
           </div>
-
-          <span className="mr-4 text-sm font-semibold">
-            {product.restaurant.deliveryTimeMinutes}min
-          </span>
-        </div>
-      </Card>
+        </Card>
+      </div>
 
       <div className="mb-3 mt-6 space-y-3 px-5">
         <h3 className="font-semibold">Sobre</h3>
         <p className="text-sm text-muted-foreground">{product.description}</p>
       </div>
 
-      <div className="mb-3 mt-6 space-y-3">
-        <h3 className="font-semibold">Sucos</h3>
+      <div className="mb-3 mt-6 space-y-3 ">
+        <h3 className="px-5 font-semibold">Sucos</h3>
         <ProductList products={extraProducts} />
       </div>
     </div>
