@@ -1,20 +1,15 @@
 "use client";
 
+import DeliveryInfo from "@/app/_components/delivery-info";
 import DiscountBadge from "@/app/_components/discount-badge";
 import ProductList from "@/app/_components/product-list";
 import { Button } from "@/app/_components/ui/button";
-import { Card } from "@/app/_components/ui/card";
 import {
   calculateProductTotalPrice,
   formatCurrency,
 } from "@/app/_helpers/price";
 import { Prisma } from "@prisma/client";
-import {
-  BikeIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  TimerIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -92,33 +87,7 @@ const ProductInfo = ({ product, extraProducts }: ProductInfoProps) => {
       </div>
 
       <div className="px-5">
-        <Card className="mt-5 flex justify-around p-5">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <span>Entrega</span>
-              <BikeIcon />
-            </div>
-
-            {Number(product.restaurant.deliveryFee) > 0 ? (
-              <p className="mr-4 text-sm font-semibold">
-                {formatCurrency(Number(product.restaurant.deliveryFee))}
-              </p>
-            ) : (
-              <p className="mr-4 text-sm font-semibold">Grátis</p>
-            )}
-          </div>
-
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <span>Tempo</span>
-              <TimerIcon />
-            </div>
-
-            <span className="mr-4 text-sm font-semibold">
-              {product.restaurant.deliveryTimeMinutes}min
-            </span>
-          </div>
-        </Card>
+        <DeliveryInfo restaurant={product.restaurant} />
       </div>
 
       <div className="mb-3 mt-6 space-y-3 px-5">
