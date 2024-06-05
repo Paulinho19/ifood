@@ -1,7 +1,7 @@
 import { db } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
-import ProductImage from "./components/product-image";
-import ProductInfo from "./components/product-info";
+import ProductImage from "./_components/product-image";
+import ProductInfo from "./_components/product-info";
 
 interface ProductsPageProps {
   params: {
