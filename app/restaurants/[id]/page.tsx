@@ -4,6 +4,7 @@ import RestaurantImage from "./_components/restaurant-image";
 import Image from "next/image";
 import { StarIcon } from "lucide-react";
 import DeliveryInfo from "@/app/_components/delivery-info";
+import ProductList from "@/app/_components/product-list";
 
 interface RestaurantPageProps {
   params: {
@@ -14,10 +15,38 @@ interface RestaurantPageProps {
 const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
   const restaurant = await db.restaurant.findUnique({
     where: {
-      id: id,
+      id,
     },
     include: {
-      categories: true,
+      categories: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          products: {
+            where: {
+              restaurantId: id,
+            },
+            include: {
+              restaurant: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      product: {
+        take: 10,
+        include: {
+          restaurant: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -64,6 +93,18 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
           </div>
         ))}
       </div>
+
+      <div className="mt-6 space-y-4">
+        <h2 className="px-5  font-semibold">Mais Pedidos</h2>
+        <ProductList products={restaurant.product} />
+      </div>
+
+      {restaurant.categories.map((category) => (
+        <div className="mt-6 space-y-4" key={category.id}>
+          <h2 className="px-5  font-semibold">{category.name}</h2>
+          <ProductList products={category.products} />
+        </div>
+      ))}
     </div>
   );
 };
