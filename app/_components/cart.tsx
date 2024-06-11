@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../_context/cart";
-import { Card, CardContent } from "./ui/card";
 import CartItem from "./cart-item";
+import { Card, CardContent } from "./ui/card";
 import { formatCurrency } from "../_helpers/price";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { createOrder } from "../_actions/order";
+import { OrderStatus } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 import {
   AlertDialog,
@@ -16,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface CartProps {
@@ -29,8 +33,58 @@ const Cart = ({ setIsOpen }: CartProps) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
+  const { data } = useSession();
+
   const { products, subtotalPrice, totalPrice, totalDiscounts, clearCart } =
     useContext(CartContext);
+
+  const handleFinishOrderClick = async () => {
+    if (!data?.user) return;
+
+    const restaurant = products[0].restaurant;
+
+    try {
+      setIsSubmitLoading(true);
+
+      await createOrder({
+        subtotalPrice,
+        totalDiscounts,
+        totalPrice,
+        deliveryFee: restaurant.deliveryFee,
+        deliveryTimeMinutes: restaurant.deliveryTimeMinutes,
+        restaurant: {
+          connect: { id: restaurant.id },
+        },
+        status: OrderStatus.CONFIRMED,
+        user: {
+          connect: { id: data.user.id },
+        },
+        products: {
+          createMany: {
+            data: products.map((product) => ({
+              productId: product.id,
+              quantity: product.quantity,
+            })),
+          },
+        },
+      });
+
+      clearCart();
+      setIsOpen(false);
+
+      toast("Pedido finalizado com sucesso!", {
+        description: "Você pode acompanhá-lo na tela dos seus pedidos.",
+        action: {
+          label: "Meus Pedidos",
+          onClick: () => router.push("/my-orders"),
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitLoading(false);
+    }
+  };
 
   return (
     <>
@@ -109,7 +163,10 @@ const Cart = ({ setIsOpen }: CartProps) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction disabled={isSubmitLoading}>
+            <AlertDialogAction
+              onClick={handleFinishOrderClick}
+              disabled={isSubmitLoading}
+            >
               {isSubmitLoading && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
