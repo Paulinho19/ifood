@@ -157,8 +157,7 @@ const Cart = ({ setIsOpen }: CartProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Deseja finalizar seu pedido?</AlertDialogTitle>
             <AlertDialogDescription>
-              Ao finalizar seu pedido, você concorda com os termos e condições
-              da nossa plataforma.
+              Ao finalizar, seu pedido será encaminhado ao restaurante.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 const Search = () => {
   const router = useRouter();
-
   const [search, setSearch] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +23,7 @@ const Search = () => {
 
     router.push(`/restaurants?search=${search}`);
   };
+
   return (
     <form className="flex gap-2" onSubmit={handleSearchSubmit}>
       <Input
