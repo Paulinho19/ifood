@@ -1,15 +1,15 @@
 import { db } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
 import ProductImage from "./_components/product-image";
-import ProductInfo from "./_components/product-info";
+import ProductDetails from "./_components/product-info";
 
-interface ProductsPageProps {
+interface ProductPageProps {
   params: {
     id: string;
   };
 }
 
-const ProductsPage = async ({ params: { id } }: ProductsPageProps) => {
+const ProductPage = async ({ params: { id } }: ProductPageProps) => {
   const product = await db.product.findUnique({
     where: {
       id,
@@ -29,7 +29,7 @@ const ProductsPage = async ({ params: { id } }: ProductsPageProps) => {
         name: "Sucos",
       },
       restaurant: {
-        id: product?.restaurantId,
+        id: product?.restaurant.id,
       },
     },
     include: {
@@ -41,9 +41,9 @@ const ProductsPage = async ({ params: { id } }: ProductsPageProps) => {
     <div>
       <ProductImage product={product} />
 
-      <ProductInfo product={product} extraProducts={juices} />
+      <ProductDetails product={product} complementaryProducts={juices} />
     </div>
   );
 };
 
-export default ProductsPage;
+export default ProductPage;
