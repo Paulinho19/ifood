@@ -1,3 +1,10 @@
+![image](https://github.com/Paulinho19/ifood/assets/98109654/bf4ab3b9-7e29-4ef7-a613-97d0eddc352f)
+
+![image](https://github.com/Paulinho19/ifood/assets/98109654/15c962a3-8c71-4f36-8f3e-b96ac5da8549)
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
